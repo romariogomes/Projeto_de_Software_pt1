@@ -69,4 +69,6 @@ public class Product {
 				+ ", endDate=" + endDate + "]";
 	}
 	
+	
+	
 }
