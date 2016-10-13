@@ -63,11 +63,25 @@ public class CatalogController {
     }
 
     public Collection<Product> searchProductsByName(String name) {
-        return catalog.getProducts();
+    	Collection<Product> products = new ArrayList<>();
+        for (Product product : catalog.getProducts()) {
+            if (product.getName() == name) {
+                products.add(product);
+            }
+        }
+        
+        return products;
     }
 
     public Collection<Product> searchProductsByStartDate(Date startDate) {
-        return catalog.getProducts();
+    	Collection<Product> products = new ArrayList<>();
+        for (Product product : catalog.getProducts()) {
+            if (product.getStartDate() == startDate) {
+                products.add(product);
+            }
+        }
+        
+        return products;
     }
 
 }

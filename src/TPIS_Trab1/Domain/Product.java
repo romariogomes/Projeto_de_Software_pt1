@@ -77,6 +77,4 @@ public class Product implements Serializable {
         this.endDate = endDate;
     }
     
-    
-    
 }
