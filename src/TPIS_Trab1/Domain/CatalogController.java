@@ -66,7 +66,7 @@ public class CatalogController {
     public Collection<Product> searchProductsByName(String name) {
     	Collection<Product> products = new ArrayList<>();
         for (Product product : catalog.getProducts()) {
-            if (product.getName() == name) {
+            if (product.getName().contains(name)) {
                 products.add(product);
             }
         }
@@ -77,12 +77,16 @@ public class CatalogController {
     public Collection<Product> searchProductsByStartDate(Date startDate) {
     	Collection<Product> products = new ArrayList<>();
         for (Product product : catalog.getProducts()) {
-            if (product.getStartDate() == startDate) {
+            if (product.getStartDate().equals(startDate)) {
                 products.add(product);
             }
         }
         
         return products;
+    }
+
+    public Collection<Product> getProducts() {
+        return catalog.getProducts();
     }
 
 }

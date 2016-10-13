@@ -8,9 +8,9 @@ package TPIS_Trab1.UI;
 import TPIS_Trab1.Domain.CatalogController;
 import TPIS_Trab1.Domain.Product;
 import TPIS_Trab1.Services.InputManager;
-import TPIS_Trab1.Services.LocalDate; 
 import TPIS_Trab1.Services.FileManager;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -26,10 +26,12 @@ public class Main {
 
     public static final int OPT_CADASTRAR_PRODUTOS = 1;
     public static final int OPT_PROCURAR_PRODUTOS = 2;
+    public static final int OPT_LISTAR_PRODUTOS = 3;
 
-    public static final int OPT_PROCURAR_POR_CODIGO = 11;
-    public static final int OPT_PROCURAR_POR_NOME = 12;
-    public static final int OPT_PROCURAR_POR_INICIO = 13;
+    public static final int OPT_PROCURAR_POR_CODIGO = 1;
+    public static final int OPT_PROCURAR_POR_NOME = 2;
+    public static final int OPT_PROCURAR_POR_INICIO = 3;
+    public static final int OPT_PROCURAR_CANCELAR = 0;
 
     public static final String FILE_CATALOG_DATA = "/resources/catalog.data";
 
@@ -77,7 +79,7 @@ public class Main {
         System.out.println("### Procurar Produtos");
 
         int option = -1;
-        while (option != 0) {
+        while (option == -1) {
             System.out.println("Selecione uma opção");
             System.out.println("1 - Por Código");
             System.out.println("2 - Por Nome");
@@ -88,38 +90,56 @@ public class Main {
 
             // Faz a execução da opção
             option = inputManager.getInt();
-            switch (option+10) {
+            switch (option) {
                 case OPT_PROCURAR_POR_CODIGO:
                     System.out.print("Digite o código do produto: ");
                     int codigo = inputManager.getInt();
                     products = new ArrayList(catalogController.searchProductsById(codigo));
                     break;
-                
-                
+
                 case OPT_PROCURAR_POR_NOME:
                     System.out.print("Digite o nome do produto: ");
                     String nome = inputManager.getString();
                     products = new ArrayList(catalogController.searchProductsByName(nome));
                     break;
-                    
+
                 case OPT_PROCURAR_POR_INICIO:
                     System.out.print("Digite a data de inicio do produto: ");
-                    LocalDate date = inputManager.getDate();
+                    Date date = inputManager.getDate();
                     products = new ArrayList(catalogController.searchProductsByStartDate(date));
                     break;
                     
+                case OPT_PROCURAR_CANCELAR:
+                    // DO NOTHING
+                    break;
+
                 default:
+                    option = -1;
                     System.out.println("Selecione uma opção válida.");
                     break;
             }
 
-            for (Product product : products) {
-                System.out.println(product);
-            }
-
-            // Dá uma limpada na tela
-            System.out.println("\n\n\n");
+            listProducts(products);
         }
+    }
+
+    private static void listProducts() {
+        listProducts(catalogController.getProducts());
+    }
+
+    private static void listProducts(Collection<Product> products) {
+        System.out.println("### Resultado:");
+        System.out.println("Qtd Produtos: " + products.size());
+        
+        if (products.isEmpty()) {
+            System.out.println("Não há produtos para listar");
+            return;
+        }
+        
+        for (Product product : products) {
+            System.out.println(product);
+        }
+
     }
 
     private static void menu() {
@@ -130,6 +150,7 @@ public class Main {
             System.out.println("Selecione uma opção");
             System.out.println("1 - Cadastrar Produtos");
             System.out.println("2 - Procurar Produtos");
+            System.out.println("3 - Listar Produtos");
             System.out.println("0 - Sair");
 
             // Faz a execução da opção
@@ -140,6 +161,9 @@ public class Main {
                     break;
                 case OPT_PROCURAR_PRODUTOS:
                     searchProduct();
+                    break;
+                case OPT_LISTAR_PRODUTOS:
+                    listProducts();
                     break;
                 default:
                     System.out.println("Selecione uma opção válida.");
