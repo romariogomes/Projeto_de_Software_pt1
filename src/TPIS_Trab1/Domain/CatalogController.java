@@ -41,8 +41,10 @@ public class CatalogController {
         product.setName(name);
         product.setDescription(description);
         product.setStartDate(startDate);
+        //OBS product.setStartDate(LocalDate.of(year, month, day)); 
         product.setEndDate(endDate);
-
+        //OBS product.setEndDate(LocalDate.of(year, month, day)); 
+        
         catalog.addProduct(product);
 
         Collection<Product> products = catalog.getProducts();

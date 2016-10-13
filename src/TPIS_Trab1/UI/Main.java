@@ -8,6 +8,7 @@ package TPIS_Trab1.UI;
 import TPIS_Trab1.Domain.CatalogController;
 import TPIS_Trab1.Domain.Product;
 import TPIS_Trab1.Services.InputManager;
+import TPIS_Trab1.Services.LocalDate; 
 import TPIS_Trab1.Services.FileManager;
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,9 +27,9 @@ public class Main {
     public static final int OPT_CADASTRAR_PRODUTOS = 1;
     public static final int OPT_PROCURAR_PRODUTOS = 2;
 
-    public static final int OPT_PROCURAR_POR_CODIGO = 1;
-    public static final int OPT_PROCURAR_POR_NOME = 1;
-    public static final int OPT_PROCURAR_POR_INICIO = 1;
+    public static final int OPT_PROCURAR_POR_CODIGO = 11;
+    public static final int OPT_PROCURAR_POR_NOME = 12;
+    public static final int OPT_PROCURAR_POR_INICIO = 13;
 
     public static final String FILE_CATALOG_DATA = "/resources/catalog.data";
 
@@ -87,15 +88,26 @@ public class Main {
 
             // Faz a execução da opção
             option = inputManager.getInt();
-            switch (option) {
+            switch (option+10) {
                 case OPT_PROCURAR_POR_CODIGO:
                     System.out.print("Digite o código do produto: ");
                     int codigo = inputManager.getInt();
                     products = new ArrayList(catalogController.searchProductsById(codigo));
                     break;
-                case OPT_PROCURAR_PRODUTOS:
-                    searchProduct();
+                
+                
+                case OPT_PROCURAR_POR_NOME:
+                    System.out.print("Digite o nome do produto: ");
+                    String nome = inputManager.getString();
+                    products = new ArrayList(catalogController.searchProductsByName(nome));
                     break;
+                    
+                case OPT_PROCURAR_POR_INICIO:
+                    System.out.print("Digite a data de inicio do produto: ");
+                    LocalDate date = inputManager.getDate();
+                    products = new ArrayList(catalogController.searchProductsByStartDate(date));
+                    break;
+                    
                 default:
                     System.out.println("Selecione uma opção válida.");
                     break;
