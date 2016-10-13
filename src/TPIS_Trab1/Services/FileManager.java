@@ -5,7 +5,6 @@
  */
 package TPIS_Trab1.Services;
 
-import TPIS_Trab1.Domain.Product;
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
@@ -48,14 +47,14 @@ public class FileManager {
         this.fileName = fileName;
     }
 
-    public Collection<Product> load() {
-        ArrayList<Product> objectList = new ArrayList<>();
+    public Collection<Object> load() {
+        ArrayList<Object> objectList = new ArrayList<>();
 
         try {
             FileInputStream fileInput = new FileInputStream(fileName);
             ObjectInputStream objectInput = new ObjectInputStream(fileInput);
 
-            objectList = (ArrayList<Product>) objectInput.readObject();
+            objectList = (ArrayList<Object>) objectInput.readObject();
 
             objectInput.close();
             fileInput.close();
@@ -72,7 +71,7 @@ public class FileManager {
         return objectList;
     }
 
-    public void save(Collection<Product> objects) {
+    public void save(Collection<Object> objects) {
         ArrayList<Object> objectList = new ArrayList<>(objects);
 
         try {
