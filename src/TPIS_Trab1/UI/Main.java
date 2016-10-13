@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package TPIS_Trab1.UI;
 
 import TPIS_Trab1.Domain.CatalogController;
@@ -13,10 +8,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Scanner;
 
-/**
- *
- * @author maico
- */
 public class Main {
 
     private static InputManager inputManager;

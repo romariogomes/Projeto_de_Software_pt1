@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package TPIS_Trab1.Services;
 
 import java.io.EOFException;
@@ -17,10 +12,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 
-/**
- *
- * @author maico
- */
 public class FileManager {
 
     private final String fileName;
@@ -62,10 +53,8 @@ public class FileManager {
             // DO NOTHING
         } catch (IOException e) {
             e.printStackTrace();
-//            System.exit(1);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-//            System.exit(1);
         }
 
         return objectList;
