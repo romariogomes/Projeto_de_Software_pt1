@@ -24,12 +24,11 @@ public class CatalogController {
 
         catalog = new Catalog();
 
-        Collection<Product> products = fileManager.load();
-//        System.out.println(objects);
-//        Collection<Product> products = new ArrayList<>();
-//        for (Object o : objects) {
-//            products.add((Product) o);
-//        }
+        Collection<Object> objects = fileManager.load();
+        Collection<Product> products = new ArrayList<>();
+        for (Object o : objects) {
+            products.add((Product) o);
+        }
         catalog.setProducts(products);
     }
 
@@ -46,9 +45,9 @@ public class CatalogController {
         catalog.addProduct(product);
 
         Collection<Product> products = catalog.getProducts();
-        //Collection<Object> objects = new ArrayList<>(products);
-        //fileManager.save(objects);
-        fileManager.save(products);
+        Collection<Object> objects = new ArrayList<>(products);
+        fileManager.save(objects);
+        //fileManager.save(products);
     }
 
     public Collection<Product> searchProductsById(int productId) {
