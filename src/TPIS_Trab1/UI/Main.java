@@ -19,7 +19,6 @@ import java.util.Scanner;
  */
 public class Main {
 
-    private static FileManager fileManager;
     private static InputManager inputManager;
     private static CatalogController catalogController;
 
@@ -43,14 +42,12 @@ public class Main {
     }
 
     private static void init() {
-        // Cria a instancia do FileManager
-        fileManager = new FileManager(FILE_CATALOG_DATA);
-
         // Cria a instancia do InputManager
         inputManager = new InputManager(new Scanner(System.in));
 
+        // Cria a instancia do FileManager
         // Cria a instancia do controlador do catálogo
-        catalogController = new CatalogController(fileManager);
+        catalogController = new CatalogController(new FileManager(FILE_CATALOG_DATA));
     }
 
     private static void insertProduct() {
