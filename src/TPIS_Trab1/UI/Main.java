@@ -6,7 +6,6 @@
 package TPIS_Trab1.UI;
 
 import TPIS_Trab1.Domain.CatalogController;
-import TPIS_Trab1.Domain.Product;
 import TPIS_Trab1.Services.InputManager;
 import TPIS_Trab1.Services.FileManager;
 import java.util.ArrayList;
@@ -86,7 +85,7 @@ public class Main {
             System.out.println("3 - Por Data de Início");
             System.out.println("0 - Cancelar");
 
-            ArrayList<Product> products = new ArrayList<>();
+            ArrayList<Object> products = new ArrayList<>();
 
             // Faz a execução da opção
             option = inputManager.getInt();
@@ -124,10 +123,10 @@ public class Main {
     }
 
     private static void listProducts() {
-        listProducts(catalogController.getProducts());
+        listProducts(new ArrayList(catalogController.getProducts()));
     }
 
-    private static void listProducts(Collection<Product> products) {
+    private static void listProducts(Collection<Object> products) {
         System.out.println("### Resultado:");
         System.out.println("Qtd Produtos: " + products.size());
         
@@ -136,7 +135,7 @@ public class Main {
             return;
         }
         
-        for (Product product : products) {
+        for (Object product : products) {
             System.out.println(product);
         }
 
