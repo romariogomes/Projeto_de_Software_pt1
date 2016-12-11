@@ -55,26 +55,33 @@ public class Main {
         }
     }
 
-    private static void insertProduct() {
+    private static void insertProduct(
+            Integer productId,
+            String name,
+            String description,
+            Date startDate,
+            Date endDate ) {
         System.out.println("### Cadatrar Produtos");
+        
+        askUser("Código: ", productId);
+        productId = inputManager.getInt( productId );
 
-        System.out.print("Código: ");
-        int productId = inputManager.getInt();
+        askUser("Nome: ", name);
+        name = inputManager.getString( name );
 
-        System.out.print("Nome: ");
-        String name = inputManager.getString();
+        askUser("Descrição: ", description);
+        description = inputManager.getString( description );
 
-        System.out.print("Descrição: ");
-        String description = inputManager.getString();
+        String datePattern = "dd/MM/yyyy";
+        
+        askUser("Data de Início (" + datePattern.toLowerCase() + "): ", startDate);
+        startDate = inputManager.getDate( datePattern, startDate );
 
-        System.out.print("Data de Início (dd/mm/yyyy): ");
-        Date startDate = inputManager.getDate();
-
-        System.out.print("Data de Finalização (dd/mm/yyyy): ");
-        Date endDate = inputManager.getDate();
+        askUser("Data de Finalização (" + datePattern.toLowerCase() + "): ", endDate);
+        endDate = inputManager.getDate( datePattern, endDate );
 
         try {
-            catalogController.addProduct(productId, name, description, endDate, endDate);
+            catalogController.addProduct(productId, name, description, startDate, endDate);
         } catch (CouldNotSaveProductsException ex) {
             System.out.println(ex.getMessage());
             System.out.println("Encerrando atividade do sistema.");
@@ -95,9 +102,13 @@ public class Main {
             
             if( _continue ){
                 // Chama a insersão de produtos novamente
-                insertProduct();
+                insertProduct(productId, name, description, startDate, endDate);
             }
         } 
+    }
+    
+    private static void insertProduct() {
+        insertProduct(null, null, null, null, null);
     }
 
     private static void searchProduct() {
@@ -200,6 +211,13 @@ public class Main {
         }
 
         System.out.println("Finalizando sistema. Até mais.");
+    }
+
+    private static void askUser(String message, Object value) {
+        System.out.print(message);
+        if (value != null) {
+            System.out.print("[" + value + "] ");
+        }
     }
 
 }
