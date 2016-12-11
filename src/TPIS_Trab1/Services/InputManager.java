@@ -5,6 +5,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Date;
+import java.util.Map;
 import java.util.Scanner;
 
 public class InputManager {
@@ -23,7 +24,7 @@ public class InputManager {
             return getInt();
         }
     }
-
+    
     public String getString() {
         String retorno = input.nextLine().trim();
 
@@ -49,5 +50,14 @@ public class InputManager {
         }
 
         return Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
+    }
+
+    public Object getOption(Map<String, Object> options) {
+        String option;
+        do {
+            option = this.getString().trim().toLowerCase();
+        } while( !options.keySet().contains(option) );
+        
+        return options.get(option);
     }
 }

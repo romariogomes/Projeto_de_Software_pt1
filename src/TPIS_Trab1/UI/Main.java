@@ -1,13 +1,6 @@
 package TPIS_Trab1.UI;
 
 import TPIS_Trab1.Domain.CatalogController;
-import TPIS_Trab1.Domain.Exception.InvalidEndDateException;
-import TPIS_Trab1.Domain.Exception.InvalidStartDateException;
-import TPIS_Trab1.Domain.Exception.InvalidDateComparisonException;
-import TPIS_Trab1.Domain.Exception.EmptyProductDescriptionException;
-import TPIS_Trab1.Domain.Exception.InvalidProductIdException;
-import TPIS_Trab1.Domain.Exception.ProductIdAlreadyExistsException;
-import TPIS_Trab1.Domain.Exception.EmptyProductNameException;
 import TPIS_Trab1.Domain.Exception.ProductException;
 import TPIS_Trab1.Services.InputManager;
 import TPIS_Trab1.Services.FileManager;
@@ -17,9 +10,9 @@ import TPIS_Trab1.Services.Exception.CouldNotSaveProductsException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Main {
 
@@ -54,9 +47,11 @@ public class Main {
             // Cria a instancia do controlador do catálogo
             catalogController = new CatalogController(new FileManager(FILE_CATALOG_DATA));
         } catch (CouldNotReadFileException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("ERR: Não foi possível abrir o arquivo.");
+            System.out.println("Verifique se ele não está sendo usado por outra aplicação.");
         } catch (CouldNotLoadProductsException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("ERR: Não foi possível carregar as informações do arquivo.");
+            System.out.println("O deve estar corrompido ou foi alterado durante a execução.");
         }
     }
 
@@ -91,7 +86,17 @@ public class Main {
         } catch (ProductException ex) {
             System.out.println("### " + ex.getMessage());
             
-            insertProduct();
+            System.out.print("Você deseja continuar com o cadastro? [s/N] ");
+            Map<String, Object> options = new HashMap();
+            options.put("s", new Boolean(true));
+            options.put("n", new Boolean(false));
+            
+            Boolean _continue = (Boolean) inputManager.getOption(options);
+            
+            if( _continue ){
+                // Chama a insersão de produtos novamente
+                insertProduct();
+            }
         } 
     }
 
