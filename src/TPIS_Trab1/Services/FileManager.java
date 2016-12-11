@@ -1,6 +1,8 @@
 package TPIS_Trab1.Services;
 
-import java.io.EOFException;
+import TPIS_Trab1.Services.Exception.CouldNotReadFileException;
+import TPIS_Trab1.Services.Exception.CouldNotSaveProductsException;
+import TPIS_Trab1.Services.Exception.CouldNotLoadProductsException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -16,7 +18,8 @@ public class FileManager {
 
     private final String fileName;
 
-    public FileManager(String fileName) {
+    public FileManager(String fileName) 
+            throws CouldNotReadFileException {
         // Pega o caminho do arquivo
         String absolutePath = new File(".").getAbsolutePath();
         Path path = Paths.get(absolutePath, fileName);
@@ -31,14 +34,16 @@ public class FileManager {
 
             fileName = file.getCanonicalPath();
         } catch (IOException e) {
-            e.printStackTrace();
-            System.exit(1);
+            throw new CouldNotReadFileException(
+                    "O arquivo não existe ou não pode ser aberto.", e);
         }
-        
+
         this.fileName = fileName;
     }
 
-    public Collection<Object> load() {
+    public Collection<Object> load() 
+            throws CouldNotReadFileException, 
+                   CouldNotLoadProductsException {
         ArrayList<Object> objectList = new ArrayList<>();
 
         try {
@@ -49,18 +54,19 @@ public class FileManager {
 
             objectInput.close();
             fileInput.close();
-        } catch (EOFException e) {
-            // DO NOTHING
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new CouldNotReadFileException(
+                    "O arquivo não existe ou não pode ser aberto.", e);
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            throw new CouldNotLoadProductsException(
+                    "O arquivo não existe ou não pode ser aberto.", e);
         }
 
         return objectList;
     }
 
-    public void save(Collection<Object> objects) {
+    public void save(Collection<Object> objects) 
+            throws CouldNotSaveProductsException {
         ArrayList<Object> objectList = new ArrayList<>(objects);
 
         try {
@@ -71,7 +77,8 @@ public class FileManager {
             objectOutput.close();
             fileOutput.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new CouldNotSaveProductsException(
+                    "O arquivo não existe ou não pode ser aberto.", e);
         }
     }
 

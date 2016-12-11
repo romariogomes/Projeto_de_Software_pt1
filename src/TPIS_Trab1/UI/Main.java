@@ -1,12 +1,25 @@
 package TPIS_Trab1.UI;
 
 import TPIS_Trab1.Domain.CatalogController;
+import TPIS_Trab1.Domain.Exception.InvalidEndDateException;
+import TPIS_Trab1.Domain.Exception.InvalidStartDateException;
+import TPIS_Trab1.Domain.Exception.InvalidDateComparisonException;
+import TPIS_Trab1.Domain.Exception.EmptyProductDescriptionException;
+import TPIS_Trab1.Domain.Exception.InvalidProductIdException;
+import TPIS_Trab1.Domain.Exception.ProductIdAlreadyExistsException;
+import TPIS_Trab1.Domain.Exception.EmptyProductNameException;
+import TPIS_Trab1.Domain.Exception.ProductException;
 import TPIS_Trab1.Services.InputManager;
 import TPIS_Trab1.Services.FileManager;
+import TPIS_Trab1.Services.Exception.CouldNotLoadProductsException;
+import TPIS_Trab1.Services.Exception.CouldNotReadFileException;
+import TPIS_Trab1.Services.Exception.CouldNotSaveProductsException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Main {
 
@@ -36,9 +49,15 @@ public class Main {
         // Cria a instancia do InputManager
         inputManager = new InputManager(new Scanner(System.in));
 
-        // Cria a instancia do FileManager
-        // Cria a instancia do controlador do catálogo
-        catalogController = new CatalogController(new FileManager(FILE_CATALOG_DATA));
+        try {
+            // Cria a instancia do FileManager
+            // Cria a instancia do controlador do catálogo
+            catalogController = new CatalogController(new FileManager(FILE_CATALOG_DATA));
+        } catch (CouldNotReadFileException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (CouldNotLoadProductsException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private static void insertProduct() {
@@ -59,7 +78,21 @@ public class Main {
         System.out.print("Data de Finalização (dd/mm/yyyy): ");
         Date endDate = inputManager.getDate();
 
-        catalogController.addProduct(productId, name, description, endDate, endDate);
+        try {
+            catalogController.addProduct(productId, name, description, endDate, endDate);
+        } catch (CouldNotSaveProductsException ex) {
+            System.out.println(ex.getMessage());
+            System.out.println("Encerrando atividade do sistema.");
+            System.exit(-1);
+        
+        // Utilização de polimorfismo para não ter que adicionar vários catchs
+        // ou mesmo várias exceções em um catch
+        // As exceções do produto foram agrupadas em uma exceção mais generalizada
+        } catch (ProductException ex) {
+            System.out.println("### " + ex.getMessage());
+            
+            insertProduct();
+        } 
     }
 
     private static void searchProduct() {
