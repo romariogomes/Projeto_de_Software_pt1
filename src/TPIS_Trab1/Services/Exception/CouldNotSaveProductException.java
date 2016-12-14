@@ -9,13 +9,13 @@ package TPIS_Trab1.Services.Exception;
  *
  * @author maico
  */
-public class CouldNotSaveProductsException extends Exception {
+public class CouldNotSaveProductException extends Exception {
 
-    public CouldNotSaveProductsException(String message) {
+    public CouldNotSaveProductException(String message) {
         super(message);
     }
     
-    public CouldNotSaveProductsException(String message, Exception e) {
+    public CouldNotSaveProductException(String message, Exception e) {
         super(message, e);
     }
     

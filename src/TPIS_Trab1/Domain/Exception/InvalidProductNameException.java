@@ -9,9 +9,9 @@ package TPIS_Trab1.Domain.Exception;
  *
  * @author maico
  */
-public class EmptyProductNameException extends ProductException {
+public class InvalidProductNameException extends ProductException {
     
-    public EmptyProductNameException(String message) {
+    public InvalidProductNameException(String message) {
         super(message);
     }
     

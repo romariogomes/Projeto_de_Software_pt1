@@ -6,7 +6,9 @@ import TPIS_Trab1.Services.InputManager;
 import TPIS_Trab1.Services.FileManager;
 import TPIS_Trab1.Services.Exception.CouldNotLoadProductsException;
 import TPIS_Trab1.Services.Exception.CouldNotReadFileException;
-import TPIS_Trab1.Services.Exception.CouldNotSaveProductsException;
+import TPIS_Trab1.Services.Exception.CouldNotSaveProductException;
+import TPIS_Trab1.Services.ProductDAOInterface;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -44,8 +46,10 @@ public class Main {
 
         try {
             // Cria a instancia do FileManager
+            ProductDAOInterface productDao = new FileManager(FILE_CATALOG_DATA);
+            
             // Cria a instancia do controlador do catálogo
-            catalogController = new CatalogController(new FileManager(FILE_CATALOG_DATA));
+            catalogController = new CatalogController(productDao);
         } catch (CouldNotReadFileException ex) {
             System.out.println("ERR: Não foi possível abrir o arquivo.");
             System.out.println("Verifique se ele não está sendo usado por outra aplicação.");
@@ -55,58 +59,97 @@ public class Main {
         }
     }
 
+    private static void menu() {
+        System.out.println("Bem Vindo ao Catálogo de Produtos.");
+
+        int option = -1;
+        while (option != 0) {
+            System.out.println("Selecione uma opção");
+            System.out.println("1 - Cadastrar Produtos");
+            System.out.println("2 - Procurar Produtos");
+            System.out.println("3 - Listar Produtos");
+            System.out.println("0 - Sair");
+
+            // Faz a execução da opção
+            option = inputManager.getInt();
+            switch (option) {
+                case OPT_CADASTRAR_PRODUTOS:
+                    insertProduct();
+                    break;
+                case OPT_PROCURAR_PRODUTOS:
+                    searchProduct();
+                    break;
+                case OPT_LISTAR_PRODUTOS:
+                    listProducts();
+                    break;
+                default:
+                    System.out.println("Selecione uma opção válida.");
+                    break;
+            }
+
+            // Dá uma limpada na tela
+            System.out.println("\n\n\n");
+        }
+
+        System.out.println("Finalizando sistema. Até mais.");
+    }
+
     private static void insertProduct(
             Integer productId,
             String name,
             String description,
             Date startDate,
-            Date endDate ) {
+            Date endDate) {
         System.out.println("### Cadatrar Produtos");
-        
+
         askUser("Código: ", productId);
-        productId = inputManager.getInt( productId );
+        productId = inputManager.getInt(productId);
 
         askUser("Nome: ", name);
-        name = inputManager.getString( name );
+        name = inputManager.getString(name);
 
         askUser("Descrição: ", description);
-        description = inputManager.getString( description );
+        description = inputManager.getString(description);
 
         String datePattern = "dd/MM/yyyy";
+        SimpleDateFormat dateFormat = new SimpleDateFormat(datePattern);
         
-        askUser("Data de Início (" + datePattern.toLowerCase() + "): ", startDate);
-        startDate = inputManager.getDate( datePattern, startDate );
+        String startDateFormated = startDate != null ? dateFormat.format(startDate) : null;
+        String endDateFormated = endDate != null ? dateFormat.format(endDate) : null;
+        
+        askUser("Data de Início (" + datePattern.toLowerCase() + "): ", startDateFormated);
+        startDate = inputManager.getDate(datePattern, startDate);
 
-        askUser("Data de Finalização (" + datePattern.toLowerCase() + "): ", endDate);
-        endDate = inputManager.getDate( datePattern, endDate );
+        askUser("Data de Finalização (" + datePattern.toLowerCase() + "): ", endDateFormated);
+        endDate = inputManager.getDate(datePattern, endDate);
 
         try {
             catalogController.addProduct(productId, name, description, startDate, endDate);
-        } catch (CouldNotSaveProductsException ex) {
+        } catch (CouldNotSaveProductException ex) {
             System.out.println(ex.getMessage());
             System.out.println("Encerrando atividade do sistema.");
             System.exit(-1);
-        
-        // Utilização de polimorfismo para não ter que adicionar vários catchs
-        // ou mesmo várias exceções em um catch
-        // As exceções do produto foram agrupadas em uma exceção mais generalizada
+
+            // Utilização de polimorfismo para não ter que adicionar vários catchs
+            // ou mesmo várias exceções em um catch
+            // As exceções do produto foram agrupadas em uma exceção mais generalizada
         } catch (ProductException ex) {
             System.out.println("### " + ex.getMessage());
-            
+
             System.out.print("Você deseja continuar com o cadastro? [s/N] ");
             Map<String, Object> options = new HashMap();
             options.put("s", new Boolean(true));
             options.put("n", new Boolean(false));
-            
+
             Boolean _continue = (Boolean) inputManager.getOption(options);
-            
-            if( _continue ){
+
+            if (_continue) {
                 // Chama a insersão de produtos novamente
                 insertProduct(productId, name, description, startDate, endDate);
             }
-        } 
+        }
     }
-    
+
     private static void insertProduct() {
         insertProduct(null, null, null, null, null);
     }
@@ -144,7 +187,7 @@ public class Main {
                     Date date = inputManager.getDate();
                     products = new ArrayList(catalogController.searchProductsByStartDate(date));
                     break;
-                    
+
                 case OPT_PROCURAR_CANCELAR:
                     // DO NOTHING
                     break;
@@ -166,51 +209,16 @@ public class Main {
     private static void listProducts(Collection<Object> products) {
         System.out.println("### Resultado:");
         System.out.println("Qtd Produtos: " + products.size());
-        
+
         if (products.isEmpty()) {
             System.out.println("Não há produtos para listar");
             return;
         }
-        
+
         for (Object product : products) {
             System.out.println(product);
         }
 
-    }
-
-    private static void menu() {
-        System.out.println("Bem Vindo ao Catálogo de Produtos.");
-
-        int option = -1;
-        while (option != 0) {
-            System.out.println("Selecione uma opção");
-            System.out.println("1 - Cadastrar Produtos");
-            System.out.println("2 - Procurar Produtos");
-            System.out.println("3 - Listar Produtos");
-            System.out.println("0 - Sair");
-
-            // Faz a execução da opção
-            option = inputManager.getInt();
-            switch (option) {
-                case OPT_CADASTRAR_PRODUTOS:
-                    insertProduct();
-                    break;
-                case OPT_PROCURAR_PRODUTOS:
-                    searchProduct();
-                    break;
-                case OPT_LISTAR_PRODUTOS:
-                    listProducts();
-                    break;
-                default:
-                    System.out.println("Selecione uma opção válida.");
-                    break;
-            }
-
-            // Dá uma limpada na tela
-            System.out.println("\n\n\n");
-        }
-
-        System.out.println("Finalizando sistema. Até mais.");
     }
 
     private static void askUser(String message, Object value) {

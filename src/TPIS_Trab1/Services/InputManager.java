@@ -1,5 +1,6 @@
 package TPIS_Trab1.Services;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -18,14 +19,9 @@ public class InputManager {
 
     public int getInt(Integer value) {
         try {
-            String line = this.getString();
-
-            // Se a entrada for vazia e o houver valor padrão
-            // retorna o valor padrão
-            if (line.isEmpty() && value != null) {
-                return value;
-            }
-
+            String stringValue = value != null ? value.toString() : null;
+            String line = this.getString(stringValue);
+            
             return Integer.parseInt(line);
         } catch (NumberFormatException e) {
             System.out.print("Digite um número inteiro: ");
@@ -59,14 +55,11 @@ public class InputManager {
     }
 
     public Date getDate( String pattern, Date value ) {
-        // Pega uma string e confere se é uma data
-        String line = getString();
+        SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
+        String valueFormated = value != null ? dateFormat.format(value) : null;
         
-        // Se a entrada for vazia e o houver valor padrão
-        // retorna o valor padrão
-        if (line.isEmpty() && value != null) {
-            return value;
-        }
+        // Pega uma string e confere se é uma data
+        String line = getString(valueFormated);
         
         LocalDate date;
         try {
