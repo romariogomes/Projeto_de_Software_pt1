@@ -14,17 +14,18 @@ public class Product implements Serializable {
     private Date endDate;
 
     Product() {}
-    
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        
+
         sb.append(productId).append(" - ").append(name).append("\n");
         sb.append(description).append("\n");
-        
+
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
         sb.append("Início do Projeto: ").append(dateFormat.format(startDate)).append("\n");
         sb.append("Finalização do Projeto: ").append(dateFormat.format(endDate)).append("\n");
-        
+
         return sb.toString();
     }
 
@@ -67,5 +68,5 @@ public class Product implements Serializable {
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
-    
+
 }

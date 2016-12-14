@@ -47,7 +47,7 @@ public class Main {
         try {
             // Cria a instancia do FileManager
             ProductDAOInterface productDao = new FileManager(FILE_CATALOG_DATA);
-            
+
             // Cria a instancia do controlador do catálogo
             catalogController = new CatalogController(productDao);
         } catch (CouldNotReadFileException ex) {
@@ -113,10 +113,10 @@ public class Main {
 
         String datePattern = "dd/MM/yyyy";
         SimpleDateFormat dateFormat = new SimpleDateFormat(datePattern);
-        
+
         String startDateFormated = startDate != null ? dateFormat.format(startDate) : null;
         String endDateFormated = endDate != null ? dateFormat.format(endDate) : null;
-        
+
         askUser("Data de Início (" + datePattern.toLowerCase() + "): ", startDateFormated);
         startDate = inputManager.getDate(datePattern, startDate);
 

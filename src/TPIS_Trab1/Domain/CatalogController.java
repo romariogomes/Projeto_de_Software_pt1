@@ -9,9 +9,6 @@ import TPIS_Trab1.Domain.Exception.InvalidProductIdException;
 import TPIS_Trab1.Domain.Exception.ProductException;
 import TPIS_Trab1.Domain.Exception.ProductIdAlreadyExistsException;
 import TPIS_Trab1.Services.Exception.CouldNotSaveProductException;
-import TPIS_Trab1.Services.Exception.CouldNotLoadProductsException;
-import TPIS_Trab1.Services.Exception.CouldNotReadFileException;
-import TPIS_Trab1.Services.FileManager;
 import TPIS_Trab1.Services.ProductDAOInterface;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -23,23 +20,20 @@ public class CatalogController {
     private static Catalog catalog;
     private final ProductDAOInterface productDao;
 
-    public CatalogController(ProductDAOInterface productDao)
-            throws CouldNotReadFileException,
-            CouldNotLoadProductsException {
+    public CatalogController(ProductDAOInterface productDao) {
         this.productDao = productDao;
 
         catalog = new Catalog();
 
         Collection<Product> products = productDao.getProducts();
-        
+
         catalog.setProducts(products);
     }
 
     public void addProduct(
             int productId, String name, String description, Date startDate, Date endDate)
-            throws ProductException, 
-                   CouldNotSaveProductException 
-    {
+            throws ProductException,
+            CouldNotSaveProductException {
 
         Product product = new Product();
         // Se o id do produto for menor ou igual a zero, tem que lancar exceção
@@ -91,7 +85,7 @@ public class CatalogController {
         product.setEndDate(endDate);
 
         productDao.addProduct(product);
-        
+
         catalog.addProduct(product);
     }
 

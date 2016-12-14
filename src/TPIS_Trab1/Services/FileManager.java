@@ -98,9 +98,9 @@ public class FileManager implements ProductDAOInterface {
     }
 
     @Override
-    public Product getProduct(Integer id) {
+    public Product getProduct(Integer productId) {
         for (Product product : this.products) {
-            if (id.equals(product.getProductId())) {
+            if (productId.equals(product.getProductId())) {
                 return product;
             }
         }

@@ -17,7 +17,7 @@ public interface ProductDAOInterface {
     
     public Collection<Product> getProducts();
     
-    public Product getProduct(Integer id);
+    public Product getProduct(Integer productId);
     
     public void addProduct(Product product) throws CouldNotSaveProductException;
     
